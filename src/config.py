@@ -23,6 +23,12 @@ CUSTOMER_FEATURES_TABLE = "customer_features"
 CUSTOMER_SEGMENTS_TABLE = "customer_segments"
 
 # ==============================
+# Output Folder
+# ==============================
+
+PROCESSED_DATA_PATH = "data/processed"
+
+# ==============================
 # SEGMENTATION
 # ==============================
 
