@@ -1,0 +1,85 @@
+import pandas as pd
+import duckdb
+
+from config import (
+    RAW_DATA_PATH,
+    DATABASE_PATH,
+    CUSTOMER_EVENTS_TABLE
+)
+
+def load_data():
+    """
+    Load the Online Retail dataset.
+    """
+
+    df = pd.read_csv(RAW_DATA_PATH)
+
+    print("\nDataset Loaded Successfully!")
+    print(f"Rows    : {df.shape[0]}")
+    print(f"Columns : {df.shape[1]}")
+
+    return df
+
+
+def clean_data(df):
+    """
+    Clean the dataset.
+    """
+
+    print("\nCleaning Dataset...")
+
+    # Remove rows with missing Customer ID
+    df = df.dropna(subset=["Customer ID"])
+
+    # Remove rows with missing Description
+    df = df.dropna(subset=["Description"])
+
+    # Remove duplicate rows
+    df = df.drop_duplicates()
+
+    # Keep only positive quantities
+    df = df[df["Quantity"] > 0]
+
+    # Keep only positive prices
+    df = df[df["Price"] > 0]
+
+    # Convert InvoiceDate to datetime
+    df["InvoiceDate"] = pd.to_datetime(df["InvoiceDate"])
+
+    # Create TotalAmount column
+    df["TotalAmount"] = df["Quantity"] * df["Price"]
+
+    print("Cleaning Completed!")
+
+    print(f"Rows after cleaning : {len(df)}")
+    print(f"Columns             : {len(df.columns)}")
+
+    return df
+
+def save_to_duckdb(df):
+    """
+    Save cleaned data into DuckDB.
+    """
+
+    print("\nSaving data to DuckDB...")
+
+    conn = duckdb.connect(DATABASE_PATH)
+
+    conn.execute(f"DROP TABLE IF EXISTS {CUSTOMER_EVENTS_TABLE}")
+
+    conn.register("customer_df", df)
+
+    conn.execute(f"""
+        CREATE TABLE {CUSTOMER_EVENTS_TABLE} AS
+        SELECT *
+        FROM customer_df
+    """)
+
+    conn.close()
+
+    print("DuckDB database created successfully!")
+
+if __name__ == "__main__":
+    df = load_data()
+    df = clean_data(df)
+    save_to_duckdb(df)
