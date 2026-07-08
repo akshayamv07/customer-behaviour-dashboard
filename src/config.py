@@ -19,7 +19,7 @@ DATABASE_PATH = "data/customer_analytics.duckdb"
 # ==============================
 
 CUSTOMER_EVENTS_TABLE = "customer_events"
-
+CUSTOMER_FEATURES_TABLE = "customer_features"
 
 # ==============================
 # SEGMENTATION
