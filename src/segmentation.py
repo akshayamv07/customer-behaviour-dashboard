@@ -242,6 +242,33 @@ def assign_segment_labels(df):
 
     return df
 
+def calculate_churn_risk(df):
+    """
+    Classify customers into churn risk levels.
+    """
+
+    print("\nCalculating Churn Risk...")
+
+    def risk(recency):
+
+        if recency <= 30:
+            return "Low"
+
+        elif recency <= 90:
+            return "Medium"
+
+        elif recency <= 180:
+            return "High"
+
+        else:
+            return "Very High"
+
+    df["ChurnRisk"] = df["Recency"].apply(risk)
+
+    print("Churn Risk calculated successfully!")
+
+    return df
+
 def save_segments(df):
     """
     Save customer segmentation results to DuckDB.
@@ -290,6 +317,8 @@ if __name__ == "__main__":
 
     df = assign_segment_labels(df)
 
+    df = calculate_churn_risk(df)
+
     save_segments(df)
 
     print("\nSegment Preview\n")
@@ -300,7 +329,8 @@ if __name__ == "__main__":
                 "CustomerID",
                 "Cluster",
                 "Segment",
-                "RFM_Score"
+                "RFM_Score",
+                "ChurnRisk"
             ]
         ].head(20)
     
@@ -311,4 +341,11 @@ if __name__ == "__main__":
         df["Cluster"]
         .value_counts()
         .sort_index()
+    )
+
+    print("\nChurn Risk Distribution\n")
+
+    print(
+        df["ChurnRisk"]
+        .value_counts()
     )

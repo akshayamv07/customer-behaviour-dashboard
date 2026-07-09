@@ -57,9 +57,67 @@ def create_customer_features():
 
         ROUND(AVG(TotalAmount), 2)          AS AverageOrderValue,
 
+        ROUND(
+            COUNT(DISTINCT Invoice) /
+            NULLIF(
+                DATEDIFF(
+                    'day',
+                    MIN(InvoiceDate),
+                    MAX(InvoiceDate)
+                ),
+                0
+            ),
+            4
+        ) AS PurchaseFrequency,
+
+        ROUND(
+            ROUND(AVG(TotalAmount),2)
+            *
+            ROUND(
+                COUNT(DISTINCT Invoice) /
+                NULLIF(
+                    DATEDIFF(
+                        'day',
+                        MIN(InvoiceDate),
+                        MAX(InvoiceDate)
+                    ),
+                    0
+                ),
+                4
+            )
+            *
+            DATEDIFF(
+                'day',
+                MIN(InvoiceDate),
+                MAX(InvoiceDate)
+            )
+        ,2)
+        AS CustomerLifetimeValue,
+
         MIN(InvoiceDate)                    AS FirstPurchaseDate,
 
         MAX(InvoiceDate)                    AS LastPurchaseDate,
+
+        DATEDIFF(
+            'day',
+            MIN(InvoiceDate),
+            MAX(InvoiceDate)
+        ) AS CustomerLifeSpanDays,
+
+        ROUND(
+            DATEDIFF(
+                'day',
+                MIN(InvoiceDate),
+                MAX(InvoiceDate)
+            )
+            /
+            NULLIF(
+                COUNT(DISTINCT Invoice) - 1,
+                0
+            ),
+            2
+        )
+        AS AverageDaysBetweenOrders,
 
         MIN(Country)                        AS Country
 
