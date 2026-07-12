@@ -219,6 +219,31 @@ def generate_cohort_retention(df):
 
     return retention
 
+def generate_dashboard_summary(events_df):
+    """
+    Generate executive dashboard summary.
+    """
+
+    print("\nGenerating Dashboard Summary...")
+
+    summary = pd.DataFrame([{
+        "TotalRevenue": round(events_df["TotalAmount"].sum(), 2),
+        "TotalCustomers": events_df["Customer ID"].nunique(),
+        "TotalOrders": events_df["Invoice"].nunique(),
+        "AverageOrderValue": round(events_df["TotalAmount"].sum()/ events_df["Invoice"].nunique(),2)
+    }])
+
+    output_path = os.path.join(
+        PROCESSED_DATA_PATH,
+        "dashboard_summary.csv"
+    )
+
+    summary.to_csv(output_path, index=False)
+
+    print(f"Saved : {output_path}")
+
+    return summary
+
 if __name__ == "__main__":
 
     os.makedirs(PROCESSED_DATA_PATH, exist_ok=True)
@@ -239,6 +264,8 @@ if __name__ == "__main__":
 
     retention = generate_cohort_retention(events_df)
 
+    dashboard_summary = generate_dashboard_summary(events_df)
+
     print("\nSegment Overview\n")
     print(segment_overview)
 
@@ -256,3 +283,13 @@ if __name__ == "__main__":
 
     print("\nCohort Retention\n")
     print(retention.head())
+
+    segments_df.to_csv(
+        os.path.join(
+            PROCESSED_DATA_PATH,
+            "customer_segments.csv"
+        ),
+        index=False
+    )
+
+    print("Saved : customer_segments.csv")
