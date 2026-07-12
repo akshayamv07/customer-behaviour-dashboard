@@ -27,9 +27,6 @@ dist/
 .DS_Store
 Thumbs.db
 
-# Processed Data
-data/processed/
-
 # Raw Dataset
 data/raw/
 
