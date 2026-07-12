@@ -8,6 +8,7 @@ Stores all paths and constants used across the project.
 # ==============================
 
 RAW_DATA_PATH = "data/raw/online_retail_II.csv"
+CRM_DATA_PATH = "data/raw/crm_customers.csv"
 
 PROCESSED_DATA_PATH = "data/processed"
 

@@ -3,22 +3,28 @@ import duckdb
 
 from config import (
     RAW_DATA_PATH,
+    CRM_DATA_PATH,
     DATABASE_PATH,
     CUSTOMER_EVENTS_TABLE
 )
 
 def load_data():
     """
-    Load the Online Retail dataset.
+    Load the Online Retail dataset and CRM dataset.
     """
 
-    df = pd.read_csv(RAW_DATA_PATH)
+    retail_df = pd.read_csv(RAW_DATA_PATH)
+    crm_df = pd.read_csv(CRM_DATA_PATH)
 
-    print("\nDataset Loaded Successfully!")
-    print(f"Rows    : {df.shape[0]}")
-    print(f"Columns : {df.shape[1]}")
+    print("\nRetail Dataset Loaded Successfully!")
+    print(f"Rows    : {retail_df.shape[0]}")
+    print(f"Columns : {retail_df.shape[1]}")
 
-    return df
+    print("\nCRM Dataset Loaded Successfully!")
+    print(f"Rows    : {crm_df.shape[0]}")
+    print(f"Columns : {crm_df.shape[1]}")
+
+    return retail_df, crm_df
 
 
 def clean_data(df):
@@ -56,6 +62,25 @@ def clean_data(df):
 
     return df
 
+def merge_data(retail_df, crm_df):
+    """
+    Merge Retail and CRM datasets.
+    """
+
+    print("\nMerging Retail and CRM datasets...")
+
+    merged_df = retail_df.merge(
+        crm_df,
+        on="Customer ID",
+        how="left"
+    )
+
+    print("Merge Completed!")
+    print(f"Rows after merge : {len(merged_df)}")
+    print(f"Columns          : {len(merged_df.columns)}")
+
+    return merged_df
+
 def save_to_duckdb(df):
     """
     Save cleaned data into DuckDB.
@@ -80,6 +105,11 @@ def save_to_duckdb(df):
     print("DuckDB database created successfully!")
 
 if __name__ == "__main__":
-    df = load_data()
-    df = clean_data(df)
-    save_to_duckdb(df)
+
+    retail_df, crm_df = load_data()
+
+    retail_df = clean_data(retail_df)
+
+    merged_df = merge_data(retail_df, crm_df)
+
+    save_to_duckdb(merged_df)
