@@ -233,3 +233,22 @@ Full Stack Developer (.NET | React | Python | Power BI)
 
 GitHub:
 https://github.com/akshayamv07
+
+## AI Prompt Engineering
+
+The project uses Google Gemini 2.5 Flash to generate executive-level customer behaviour insights from the calculated analytics summary.
+
+The prompt follows a structured approach:
+
+- **Role definition:** The model is assigned the role of a Senior Business Analyst.
+- **Structured output:** The response is requested in five sections:
+  1. Executive Summary
+  2. Customer Insights
+  3. Business Risks
+  4. Marketing Recommendations
+  5. Executive Action Plan
+- **Data grounding:** The model receives the calculated Customer Analytics Summary as its input.
+- **Accuracy constraint:** The prompt explicitly instructs the model not to invent numbers.
+- **Presentation constraint:** The response is requested in professional language using bullet points.
+
+This approach is intended to keep the generated narrative focused on the calculated customer analytics while producing actionable business insights.
