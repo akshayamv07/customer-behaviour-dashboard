@@ -44,3 +44,43 @@ def test_frequency_is_positive():
 def test_monetary_is_positive():
     df = pd.read_csv("data/processed/customer_segments.csv")
     assert (df["Monetary"] > 0).all()
+
+def test_load_customer_events():
+    from src.feature_engineering import load_customer_events
+
+    df = load_customer_events()
+
+    assert df is not None
+    assert not df.empty
+    assert "Customer ID" in df.columns
+    assert "TotalAmount" in df.columns
+
+
+def test_create_customer_features():
+    from src.feature_engineering import create_customer_features
+    from src.database import load_customer_events
+    import duckdb
+
+    # Ensure the real customer_events table is available
+    events = load_customer_events()
+
+    assert events is not None
+    assert not events.empty
+
+    result = create_customer_features()
+
+    assert result is None
+
+    conn = duckdb.connect("data/customer_analytics.duckdb")
+    features = conn.execute("SELECT * FROM customer_features").fetchdf()
+    conn.close()
+
+    assert not features.empty
+
+
+def test_preview_customer_features():
+    from src.feature_engineering import preview_customer_features
+
+    result = preview_customer_features()
+
+    assert result is None

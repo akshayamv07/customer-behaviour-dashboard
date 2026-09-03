@@ -1,7 +1,7 @@
 import pandas as pd
 import duckdb
 
-from config import (
+from .config import (
     RAW_DATA_PATH,
     CRM_DATA_PATH,
     DATABASE_PATH,
@@ -113,3 +113,4 @@ if __name__ == "__main__":
     merged_df = merge_data(retail_df, crm_df)
 
     save_to_duckdb(merged_df)
+

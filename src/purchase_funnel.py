@@ -1,7 +1,7 @@
 import duckdb
 import pandas as pd
 
-from config import (
+from .config import (
     DATABASE_PATH,
     CUSTOMER_SEGMENTS_TABLE
 )

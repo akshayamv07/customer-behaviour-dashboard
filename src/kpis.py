@@ -1,9 +1,9 @@
 import os
 import pandas as pd
 
-from config import PROCESSED_DATA_PATH
+from .config import PROCESSED_DATA_PATH
 
-from database import (
+from .database import (
     load_customer_segments,
     load_customer_events
 )

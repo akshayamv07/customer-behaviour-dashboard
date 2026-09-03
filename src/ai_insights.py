@@ -5,7 +5,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from google import genai
 
-from config import (
+from .config import (
     DATABASE_PATH,
     CUSTOMER_SEGMENTS_TABLE
 )

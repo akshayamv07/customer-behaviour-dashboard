@@ -5,7 +5,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
-from config import (
+from .config import (
     DATABASE_PATH,
     CUSTOMER_FEATURES_TABLE,
     CUSTOMER_SEGMENTS_TABLE
