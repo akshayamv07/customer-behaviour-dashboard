@@ -8,13 +8,13 @@ from .config import (
     CUSTOMER_EVENTS_TABLE
 )
 
-def load_data():
+def load_data(retail_path=RAW_DATA_PATH, crm_path=CRM_DATA_PATH):
     """
     Load the Online Retail dataset and CRM dataset.
     """
 
-    retail_df = pd.read_csv(RAW_DATA_PATH)
-    crm_df = pd.read_csv(CRM_DATA_PATH)
+    retail_df = pd.read_csv(retail_path)
+    crm_df = pd.read_csv(crm_path)
 
     print("\nRetail Dataset Loaded Successfully!")
     print(f"Rows    : {retail_df.shape[0]}")
@@ -81,14 +81,14 @@ def merge_data(retail_df, crm_df):
 
     return merged_df
 
-def save_to_duckdb(df):
+def save_to_duckdb(df, database_path=DATABASE_PATH):
     """
     Save cleaned data into DuckDB.
     """
 
     print("\nSaving data to DuckDB...")
 
-    conn = duckdb.connect(DATABASE_PATH)
+    conn = duckdb.connect(database_path)
 
     conn.execute(f"DROP TABLE IF EXISTS {CUSTOMER_EVENTS_TABLE}")
 
