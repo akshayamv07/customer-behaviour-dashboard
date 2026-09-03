@@ -12,9 +12,7 @@ from .config import (
 
 load_dotenv()
 
-client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
+client = None
 def load_segments():
     """
     Load customer segmentation results.
@@ -92,6 +90,13 @@ Keep the response professional.
 Use bullet points.
 Do not invent numbers.
 """
+
+    global client
+
+    if client is None:
+        client = genai.Client(
+            api_key=os.getenv("GEMINI_API_KEY")
+        )
 
     response = client.models.generate_content(
         model="gemini-2.5-flash",
